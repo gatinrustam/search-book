@@ -1,21 +1,25 @@
 const {
   createStore,
-  // combineReducers
+  combineReducers
 } = require("redux");
 
-function combineReducers(obj) {
-  return (state = {}, action) => {
-    const nextState = {};
+const {searchReducer} = require("./reducers/search.js");
+
+// function combineReducers(obj) {
+//   return (state = {}, action) => {
+//     const nextState = {};
     
-    for (const key in obj) {
-      nextState[key] = obj[key](state[key], action);
-    }
+//     for (const key in obj) {
+//       nextState[key] = obj[key](state[key], action);
+//     }
 
-    return nextState;
-  }
-}
+//     return nextState;
+//   }
+// }
 
-const rootReducer = combineReducers();
+const rootReducer = combineReducers({
+  search: searchReducer,
+});
 
 const store = createStore(rootReducer);
 

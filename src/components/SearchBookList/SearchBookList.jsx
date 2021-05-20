@@ -1,52 +1,93 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, connect } from 'react-redux';
 import { SearchBook } from '../../components/SearchBook/SearchBook';
 import { Loading } from '../../components/Loading/Loading';
-// import { SearchResult } from '../../components/SearchResult/SearchResult';
+import { SearchResult } from '../../components/SearchResult/SearchResult';
 
-export function SearchBookList() {  
-  const [error, setError] = useState(null);
+// redux state
+// not use now
+function mapStateToProps(state) {
+  return {
+    list: state.search
+  }
+}
+
+// search request from Library Search API
+// docs https://openlibrary.org/dev/docs/api/search
+function fetchSearch(searchRequest) {
+  return fetch(`http://openlibrary.org/search.json?title=${searchRequest}`)
+  .then(res => res.json())
+  .then(
+    (result) => {
+      return result.docs;
+    },
+    (error) => {
+      return error;
+    }
+  )
+}
+
+export const SearchBookList = connect(mapStateToProps)(SearchBookList_);
+
+function SearchBookList_() {  
+  // const dispatch = useDispatch();
+
+  // const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [docs, setDocs] = useState([]);
 
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("lord+of+the+rings");
 
   const updateChangeHandle = (e) => {
     const {value} = e.target;
     setValue(value);
+    
+    // dispatch(setDocs);
   }
 
-  console.log(value)
-
   useEffect(() => {
-    fetch(`http://openlibrary.org/search.json?title=${value}`)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setDocs(result.docs);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      )
-  }, [value])
+    setIsLoaded(true);
+    fetchSearch(value).then(preload => {
+      setDocs(preload);
+      setIsLoaded(false);
+    });
+  }, [value]);
+
+  console.log(docs)
+
+  // prepare data to render
+  const preloadData = docs.map(doc => {
+    return {
+      id: doc.key + doc.type,
+      url: doc.key,
+      title: doc.title,
+      cover: doc.cover_edition_key
+    }
+  }).slice(0, 5);
 
 
   return (
-    <div>
+    <main>
       <SearchBook 
         value={value}
         updateChangeHandle={updateChangeHandle}
       />
-      {error && <div>error</div>}
-      {!isLoaded ? <Loading /> : ''}
-      {docs.map(item => (
-        <li key={item.key}>
-          {item.title}
-        </li>
-      ))}
-      {/* <SearchResult /> */}
-    </div>
+
+      <div className="search-results">
+        {isLoaded ? <Loading /> : ''}
+
+        {preloadData.map(item => {
+          return (
+            <SearchResult
+              key={item.id}
+              url={item.url}
+              title={item.title}
+              cover={item.cover}
+            />
+          )
+        }
+        )}
+      </div>
+    </main>
   )
 }

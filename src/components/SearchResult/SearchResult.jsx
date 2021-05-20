@@ -1,23 +1,18 @@
 import React from 'react';
 import './SearchResult.sass';
 
-export function SearchResult() {
+export function SearchResult({ title, url, cover}) {
   return (
-    <div className="search-results">
-      <div className="search-result">
-        res 01
+    <div className="search-result">
+      <div className="search-result__image">
+        <img src={`http://covers.openlibrary.org/b/olid/${cover}-L.jpg`} alt="" />
       </div>
-      <div className="search-result">
-        res 02
-      </div>
-      <div className="search-result">
-        res 03
-      </div>
-      <div className="search-result">
-        res 04
-      </div>
-      <div className="search-result">
-        res 05
+      <div className="search-result__title">
+
+        <h2>{title}</h2>
+        <a href={`https://openlibrary.org/${url}`}>Book</a>
+        <div>{url}</div>
+        <div>{cover}</div>
       </div>
     </div>
   )

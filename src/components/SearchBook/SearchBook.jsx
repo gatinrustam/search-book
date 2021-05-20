@@ -9,7 +9,8 @@ export function SearchBook({value, updateChangeHandle}) {
       type="text" 
       value={value} 
       onChange={e => updateChangeHandle(e)}
-      placeholder="By title of book" />
+      placeholder="By title of book" 
+      autoFocus={true} />
       <button 
         type="button"
         className="search__button"

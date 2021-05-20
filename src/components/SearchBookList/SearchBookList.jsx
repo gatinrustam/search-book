@@ -16,9 +16,7 @@ export function SearchBookList() {
   }
 
   console.log(value)
-  // Примечание: пустой массив зависимостей [] означает, что
-  // этот useEffect будет запущен один раз
-  // аналогично componentDidMount()
+
   useEffect(() => {
     fetch(`http://openlibrary.org/search.json?title=${value}`)
       .then(res => res.json())
@@ -27,8 +25,6 @@ export function SearchBookList() {
           setIsLoaded(true);
           setDocs(result.docs);
         },
-        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
-        // чтобы не перехватывать исключения из ошибок в самих компонентах.
         (error) => {
           setIsLoaded(true);
           setError(error);

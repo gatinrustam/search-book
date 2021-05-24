@@ -1,7 +1,7 @@
 import React from 'react';
-import './SearchBook.sass';
+import './SearchForm.sass';
 
-export function SearchBook({value, updateChangeHandle}) {
+export function SearchForm({value, updateChangeHandle}) {
 
   return (
     <div className="search">

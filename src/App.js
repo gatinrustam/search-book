@@ -1,7 +1,7 @@
 import './App.sass';
 import { Provider } from "react-redux";
 import { store } from "./store";
-import { SearchBookList } from './components/SearchBookList/SearchBookList';
+import { SearchResultList } from './components/SearchResultList/SearchResultList';
 import { Header } from './components/Header/Header';
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <Header />
-        <SearchBookList />
+        <SearchResultList />
       </div>
     </Provider>
   );
